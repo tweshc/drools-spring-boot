@@ -1,6 +1,7 @@
 package com.example.drools.droolsspringboot.config;
 
 import lombok.extern.slf4j.Slf4j;
+import org.drools.core.io.impl.ReaderResource;
 import org.kie.api.KieServices;
 import org.kie.api.builder.*;
 import org.kie.api.runtime.KieContainer;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 @Configuration
 @Slf4j
@@ -50,4 +52,31 @@ public class DroolConfig {
         log.info("BEAN created - Kie session created...");
         return getKieContainer().newKieSession();
     }
+
+    private static final String MOCK_DB_RESULT = "package KieRule;\n" +
+            "import com.example.drools.droolsspringboot.model.Order;\n" +
+            "\n" +
+            "rule \"HDFC\"\n" +
+            "\n" +
+            "when\n" +
+            "orderObject : Order(cardType==\"HDFC\" && price>10000);\n" +
+            "then\n" +
+            "orderObject.setDiscount(10);\n" +
+            "end;\n" +
+            "\n" +
+            "rule \"ICICI\"\n" +
+            "\n" +
+            "when\n" +
+            "orderObject : Order(cardType==\"ICICI\" && price>15000);\n" +
+            "then\n" +
+            "orderObject.setDiscount(8);\n" +
+            "end;\n" +
+            "\n" +
+            "rule \"DBS\"\n" +
+            "\n" +
+            "when\n" +
+            "orderObject : Order(cardType==\"DBS\" && price>15000);\n" +
+            "then\n" +
+            "orderObject.setDiscount(15);\n" +
+            "end;";
 }
